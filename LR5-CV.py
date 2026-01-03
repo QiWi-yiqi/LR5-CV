@@ -74,11 +74,40 @@ if uploaded_file is not None:
     st.subheader("Prediction Probabilities")
     st.bar_chart(df.set_index("Class"))
 
-# Step 10: Discussion Section
+# Step 10: Automatic Discussion Section
 st.subheader("Discussion of Results")
-st.write("""
-The system classifies uploaded images into ImageNet object categories using ResNet18.
-The model follows the path: image upload → preprocessing → tensor conversion → model inference → softmax → top-5 prediction output.
-The accuracy depends on image clarity, lighting, object visibility, and similarity to ImageNet training data.
-""")
+
+if uploaded_file is not None:
+
+    top1_label = class_names[top5_catid[0]]
+    top1_conf = float(top5_prob[0])
+
+    # Generate automatic interpretation
+    discussion = ""
+
+    # Confidence level analysis
+    if top1_conf > 0.85:
+        discussion += f"The model is highly confident that the image belongs to the class **'{top1_label}'** with a probability of {top1_conf:.2f}. "
+    elif top1_conf > 0.60:
+        discussion += f"The model is moderately confident that the image belongs to the class **'{top1_label}'** with a probability of {top1_conf:.2f}. "
+    else:
+        discussion += f"The model is uncertain. The highest predicted class is **'{top1_label}'** with a probability of only {top1_conf:.2f}. This suggests overlapping features with other classes. "
+
+    # Spread of top-5 probabilities
+    prob_spread = float(top5_prob[0] - top5_prob[4])
+
+    if prob_spread > 0.50:
+        discussion += "The probability gap between the top and bottom predictions is large, showing clear separation between classes. "
+    else:
+        discussion += "The probability values of the top-5 classes are close, indicating the image contains features shared across multiple categories. "
+
+    # General statement about bar chart
+    discussion += "The bar chart visualises the confidence distribution across the top-5 predicted classes. Higher bars represent stronger confidence scores produced by the softmax layer."
+
+    st.write(discussion)
+
+else:
+    st.write("Upload an image to automatically generate a discussion of the classification result.")
+
+
 
