@@ -9,11 +9,11 @@ import pandas as pd
 # Step 1: Streamlit page setup
 # -------------------------------
 st.set_page_config(
-    page_title="CPU Image Classification App",
+    page_title="VisionNet-CPU",
     layout="centered"
 )
 
-st.title("🖼️ Image Classification using ResNet18 (CPU)")
+st.title("🦖VisionNet-CPU: Web-Based Image Classification Using Pretrained ResNet18")
 st.write("This application performs image recognition using a pretrained ResNet18 model on CPU.")
 
 # -------------------------------
@@ -81,3 +81,4 @@ The system classifies uploaded images into ImageNet object categories using ResN
 The model follows the path: image upload → preprocessing → tensor conversion → model inference → softmax → top-5 prediction output.
 The accuracy depends on image clarity, lighting, object visibility, and similarity to ImageNet training data.
 """)
+
